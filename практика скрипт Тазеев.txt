@@ -1,0 +1,416 @@
+USE [master]
+GO
+/****** Object:  Database [kai_praktika]    Script Date: 04.12.2024 16:29:58 ******/
+CREATE DATABASE [kai_praktika]
+ CONTAINMENT = NONE
+ ON  PRIMARY 
+( NAME = N'kai_praktika', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL16.MSSQLSERVER\MSSQL\DATA\kai_praktika.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+ LOG ON 
+( NAME = N'kai_praktika_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL16.MSSQLSERVER\MSSQL\DATA\kai_praktika_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
+ WITH CATALOG_COLLATION = DATABASE_DEFAULT, LEDGER = OFF
+GO
+ALTER DATABASE [kai_praktika] SET COMPATIBILITY_LEVEL = 160
+GO
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+begin
+EXEC [kai_praktika].[dbo].[sp_fulltext_database] @action = 'enable'
+end
+GO
+ALTER DATABASE [kai_praktika] SET ANSI_NULL_DEFAULT OFF 
+GO
+ALTER DATABASE [kai_praktika] SET ANSI_NULLS OFF 
+GO
+ALTER DATABASE [kai_praktika] SET ANSI_PADDING OFF 
+GO
+ALTER DATABASE [kai_praktika] SET ANSI_WARNINGS OFF 
+GO
+ALTER DATABASE [kai_praktika] SET ARITHABORT OFF 
+GO
+ALTER DATABASE [kai_praktika] SET AUTO_CLOSE OFF 
+GO
+ALTER DATABASE [kai_praktika] SET AUTO_SHRINK OFF 
+GO
+ALTER DATABASE [kai_praktika] SET AUTO_UPDATE_STATISTICS ON 
+GO
+ALTER DATABASE [kai_praktika] SET CURSOR_CLOSE_ON_COMMIT OFF 
+GO
+ALTER DATABASE [kai_praktika] SET CURSOR_DEFAULT  GLOBAL 
+GO
+ALTER DATABASE [kai_praktika] SET CONCAT_NULL_YIELDS_NULL OFF 
+GO
+ALTER DATABASE [kai_praktika] SET NUMERIC_ROUNDABORT OFF 
+GO
+ALTER DATABASE [kai_praktika] SET QUOTED_IDENTIFIER OFF 
+GO
+ALTER DATABASE [kai_praktika] SET RECURSIVE_TRIGGERS OFF 
+GO
+ALTER DATABASE [kai_praktika] SET  ENABLE_BROKER 
+GO
+ALTER DATABASE [kai_praktika] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+GO
+ALTER DATABASE [kai_praktika] SET DATE_CORRELATION_OPTIMIZATION OFF 
+GO
+ALTER DATABASE [kai_praktika] SET TRUSTWORTHY OFF 
+GO
+ALTER DATABASE [kai_praktika] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+GO
+ALTER DATABASE [kai_praktika] SET PARAMETERIZATION SIMPLE 
+GO
+ALTER DATABASE [kai_praktika] SET READ_COMMITTED_SNAPSHOT OFF 
+GO
+ALTER DATABASE [kai_praktika] SET HONOR_BROKER_PRIORITY OFF 
+GO
+ALTER DATABASE [kai_praktika] SET RECOVERY FULL 
+GO
+ALTER DATABASE [kai_praktika] SET  MULTI_USER 
+GO
+ALTER DATABASE [kai_praktika] SET PAGE_VERIFY CHECKSUM  
+GO
+ALTER DATABASE [kai_praktika] SET DB_CHAINING OFF 
+GO
+ALTER DATABASE [kai_praktika] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+GO
+ALTER DATABASE [kai_praktika] SET TARGET_RECOVERY_TIME = 60 SECONDS 
+GO
+ALTER DATABASE [kai_praktika] SET DELAYED_DURABILITY = DISABLED 
+GO
+ALTER DATABASE [kai_praktika] SET ACCELERATED_DATABASE_RECOVERY = OFF  
+GO
+EXEC sys.sp_db_vardecimal_storage_format N'kai_praktika', N'ON'
+GO
+ALTER DATABASE [kai_praktika] SET QUERY_STORE = ON
+GO
+ALTER DATABASE [kai_praktika] SET QUERY_STORE (OPERATION_MODE = READ_WRITE, CLEANUP_POLICY = (STALE_QUERY_THRESHOLD_DAYS = 30), DATA_FLUSH_INTERVAL_SECONDS = 900, INTERVAL_LENGTH_MINUTES = 60, MAX_STORAGE_SIZE_MB = 1000, QUERY_CAPTURE_MODE = AUTO, SIZE_BASED_CLEANUP_MODE = AUTO, MAX_PLANS_PER_QUERY = 200, WAIT_STATS_CAPTURE_MODE = ON)
+GO
+USE [kai_praktika]
+GO
+/****** Object:  Table [dbo].[agents]    Script Date: 04.12.2024 16:29:58 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[agents](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[DealShare] [decimal](5, 2) NOT NULL,
+	[Person_Id] [int] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[clients]    Script Date: 04.12.2024 16:29:58 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[clients](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Phone] [nvarchar](15) NOT NULL,
+	[Email] [nvarchar](100) NULL,
+	[Person_Id] [int] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Deals]    Script Date: 04.12.2024 16:29:58 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Deals](
+	[Demand_Id] [int] NOT NULL,
+	[Supply_Id] [int] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Demand_Id] ASC,
+	[Supply_Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Demands]    Script Date: 04.12.2024 16:29:58 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Demands](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Address_City] [nvarchar](100) NOT NULL,
+	[Address_Street] [nvarchar](100) NOT NULL,
+	[Address_House] [nvarchar](20) NOT NULL,
+	[Address_Number] [nvarchar](20) NOT NULL,
+	[MinPrice] [decimal](10, 2) NOT NULL,
+	[MaxPrice] [decimal](10, 2) NOT NULL,
+	[AgentId] [int] NOT NULL,
+	[ClientId] [int] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Districts]    Script Date: 04.12.2024 16:29:58 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Districts](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[name] [nvarchar](100) NOT NULL,
+	[area] [decimal](10, 2) NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Normalized_Addresses]    Script Date: 04.12.2024 16:29:58 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Normalized_Addresses](
+	[Address_Id] [int] IDENTITY(1,1) NOT NULL,
+	[Address_City] [nvarchar](100) NOT NULL,
+	[Address_Street] [nvarchar](100) NOT NULL,
+	[Address_House] [nvarchar](20) NOT NULL,
+	[Address_Number] [nvarchar](20) NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Address_Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Normalized_Apartment_Demands]    Script Date: 04.12.2024 16:29:58 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Normalized_Apartment_Demands](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[MinArea] [decimal](10, 2) NULL,
+	[MaxArea] [decimal](10, 2) NULL,
+	[MinRooms] [int] NULL,
+	[MaxRooms] [int] NULL,
+	[MinFloor] [int] NULL,
+	[MaxFloor] [int] NULL,
+	[Demand_Id] [int] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Normalized_Apartments]    Script Date: 04.12.2024 16:29:58 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Normalized_Apartments](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Coordinate_latitude] [decimal](9, 6) NOT NULL,
+	[Coordinate_longitude] [decimal](9, 6) NOT NULL,
+	[TotalArea] [decimal](10, 2) NOT NULL,
+	[Rooms] [int] NOT NULL,
+	[Floor] [int] NOT NULL,
+	[RealEstate_Id] [int] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Normalized_House_Demands]    Script Date: 04.12.2024 16:29:58 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Normalized_House_Demands](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[MinFloors] [int] NULL,
+	[MaxFloors] [int] NULL,
+	[MinArea] [decimal](10, 2) NULL,
+	[MaxArea] [decimal](10, 2) NULL,
+	[MinRooms] [int] NULL,
+	[MaxRooms] [int] NULL,
+	[Demand_Id] [int] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Normalized_Houses]    Script Date: 04.12.2024 16:29:58 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Normalized_Houses](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Coordinate_latitude] [decimal](9, 6) NOT NULL,
+	[Coordinate_longitude] [decimal](9, 6) NOT NULL,
+	[TotalFloors] [int] NOT NULL,
+	[TotalArea] [decimal](10, 2) NOT NULL,
+	[RealEstate_Id] [int] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Normalized_Land_Demands]    Script Date: 04.12.2024 16:29:58 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Normalized_Land_Demands](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[MinArea] [decimal](10, 2) NULL,
+	[MaxArea] [decimal](10, 2) NULL,
+	[Demand_Id] [int] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Normalized_Lands]    Script Date: 04.12.2024 16:29:58 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Normalized_Lands](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Coordinate_latitude] [decimal](9, 6) NOT NULL,
+	[Coordinate_longitude] [decimal](9, 6) NOT NULL,
+	[TotalArea] [decimal](10, 2) NOT NULL,
+	[RealEstate_Id] [int] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[person]    Script Date: 04.12.2024 16:29:58 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[person](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[FirstName] [nvarchar](100) NOT NULL,
+	[MiddleName] [nvarchar](100) NULL,
+	[LastName] [nvarchar](100) NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[RealEstate]    Script Date: 04.12.2024 16:29:58 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[RealEstate](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[RealEstate_type_Id] [int] NOT NULL,
+	[Address_Id] [int] NOT NULL,
+	[District_Id] [int] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[RealEstate_Type]    Script Date: 04.12.2024 16:29:58 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[RealEstate_Type](
+	[RealEstate_type_Id] [int] IDENTITY(1,1) NOT NULL,
+	[RealEstate_type] [nvarchar](50) NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[RealEstate_type_Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Supplies]    Script Date: 04.12.2024 16:29:58 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Supplies](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Price] [decimal](10, 2) NOT NULL,
+	[AgentId] [int] NOT NULL,
+	[ClientId] [int] NOT NULL,
+	[RealEstateId] [int] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[agents]  WITH CHECK ADD FOREIGN KEY([Person_Id])
+REFERENCES [dbo].[person] ([Id])
+GO
+ALTER TABLE [dbo].[clients]  WITH CHECK ADD FOREIGN KEY([Person_Id])
+REFERENCES [dbo].[person] ([Id])
+GO
+ALTER TABLE [dbo].[Deals]  WITH CHECK ADD FOREIGN KEY([Demand_Id])
+REFERENCES [dbo].[Demands] ([Id])
+GO
+ALTER TABLE [dbo].[Deals]  WITH CHECK ADD FOREIGN KEY([Supply_Id])
+REFERENCES [dbo].[Supplies] ([Id])
+GO
+ALTER TABLE [dbo].[Demands]  WITH CHECK ADD FOREIGN KEY([AgentId])
+REFERENCES [dbo].[agents] ([Id])
+GO
+ALTER TABLE [dbo].[Demands]  WITH CHECK ADD FOREIGN KEY([ClientId])
+REFERENCES [dbo].[clients] ([Id])
+GO
+ALTER TABLE [dbo].[Normalized_Apartment_Demands]  WITH CHECK ADD FOREIGN KEY([Demand_Id])
+REFERENCES [dbo].[Demands] ([Id])
+GO
+ALTER TABLE [dbo].[Normalized_Apartments]  WITH CHECK ADD FOREIGN KEY([RealEstate_Id])
+REFERENCES [dbo].[RealEstate] ([id])
+GO
+ALTER TABLE [dbo].[Normalized_House_Demands]  WITH CHECK ADD FOREIGN KEY([Demand_Id])
+REFERENCES [dbo].[Demands] ([Id])
+GO
+ALTER TABLE [dbo].[Normalized_Houses]  WITH CHECK ADD FOREIGN KEY([RealEstate_Id])
+REFERENCES [dbo].[RealEstate] ([id])
+GO
+ALTER TABLE [dbo].[Normalized_Land_Demands]  WITH CHECK ADD FOREIGN KEY([Demand_Id])
+REFERENCES [dbo].[Demands] ([Id])
+GO
+ALTER TABLE [dbo].[Normalized_Lands]  WITH CHECK ADD FOREIGN KEY([RealEstate_Id])
+REFERENCES [dbo].[RealEstate] ([id])
+GO
+ALTER TABLE [dbo].[RealEstate]  WITH CHECK ADD FOREIGN KEY([Address_Id])
+REFERENCES [dbo].[Normalized_Addresses] ([Address_Id])
+GO
+ALTER TABLE [dbo].[RealEstate]  WITH CHECK ADD FOREIGN KEY([District_Id])
+REFERENCES [dbo].[Districts] ([id])
+GO
+ALTER TABLE [dbo].[RealEstate]  WITH CHECK ADD FOREIGN KEY([RealEstate_type_Id])
+REFERENCES [dbo].[RealEstate_Type] ([RealEstate_type_Id])
+GO
+ALTER TABLE [dbo].[Supplies]  WITH CHECK ADD FOREIGN KEY([AgentId])
+REFERENCES [dbo].[agents] ([Id])
+GO
+ALTER TABLE [dbo].[Supplies]  WITH CHECK ADD FOREIGN KEY([ClientId])
+REFERENCES [dbo].[clients] ([Id])
+GO
+ALTER TABLE [dbo].[Supplies]  WITH CHECK ADD FOREIGN KEY([RealEstateId])
+REFERENCES [dbo].[RealEstate] ([id])
+GO
+USE [master]
+GO
+ALTER DATABASE [kai_praktika] SET  READ_WRITE 
+GO
